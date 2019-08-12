@@ -1,0 +1,252 @@
+html {
+  box-sizing: border-box;
+  font-size: 16px;
+  padding: 0;
+  margin: 0;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+  font-family: "Quicksand", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: #90dfaa;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  background: #90dfaa;
+  padding: 30px 0;
+}
+
+header.floating {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 1;
+}
+
+header .logo {
+  height: 300px;
+  width: 150px;
+  margin-right: 20px;
+}
+
+header .content {
+  padding: 0 20px;
+}
+
+header .content h1 {
+  margin-left: 20px;
+  font-size: 40px;
+  color: #fff;
+  font-weight: 300;
+}
+
+header .content h2 {
+  margin-left: 20px;
+  margin-top: 5px;
+  font-size: 26px;
+  color: #fff;
+  font-weight: 300;
+}
+
+header .content .input {
+  margin-left: 20px;
+  margin-top: 20px;
+  background: #fff;
+  height: 150px;
+  width: 60vw;
+  border-radius: 8px;
+  max-width: 700px;
+}
+
+header .content .input textarea {
+  background: #fff;
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  font-size: 20px;
+  font-family: "Quicksand", sans-serif;
+  outline-style: none;
+  box-shadow: none;
+  border-color: transparent;
+  resize: none;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+
+header .content .error {
+  padding: 10px;
+  box-sizing: border-box;
+  background: #ff8b7d;
+  color: #fff;
+  font-size: 18px;
+  margin-left: 20px;
+  margin-top: 15px;
+  border-radius: 8px;
+  display: none;
+}
+
+header .content .buttons {
+  margin-top: 15px;
+  overflow: hidden;
+}
+
+header .content .buttons button {
+  float: right;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 25px;
+  margin-left: 5px;
+  background: #2f4858;
+  background-repeat: no-repeat;
+  background-size: 22px;
+  background-position: center center;
+  color: #fff;
+  font-size: 18px;
+  outline: none;
+}
+
+header .content .buttons button:hover {
+  cursor: pointer;
+}
+
+header .content .buttons .speak {
+  padding: 12px 16px;
+}
+
+header .content .buttons .settings {
+  float: left;
+  margin-left: 20px;
+  background-image: url("/images/settings.svg");
+}
+
+header .content .buttons .media-control {
+  display: none;
+}
+
+header .content .buttons .media-control.play {
+  background-image: url("/images/play.svg");
+}
+
+header .content .buttons .media-control.pause {
+  background-image: url("/images/pause.svg");
+}
+
+header .content .buttons .download {
+  background-image: url("/images/download.svg");
+  display: none;
+}
+
+header .content .buttons .voice.male {
+  background-image: url("/images/voice-male.svg");
+}
+
+header .content .buttons .voice.female {
+  background-image: url("/images/voice-female.svg");
+}
+
+.code {
+  padding: 20px;
+  height: 300px;
+  background: #2f4858;
+  display: none;
+  min-height: 200px;
+}
+
+.code textarea {
+  width: 100%;
+  height: 100%;
+  padding: 15px;
+  font-size: 16px;
+  font-family: "Courier New", sans-serif;
+  outline-style: none;
+  box-shadow: none;
+  border-color: transparent;
+  resize: none;
+  box-sizing: border-box;
+  background: #2f4858;
+  color: #fff;
+}
+
+@media (max-width: 400px) {
+  header .logo {
+    height: 200px;
+    margin-right: 0;
+  }
+
+  header .content .buttons button {
+    float: none;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  header .content .buttons button {
+    margin-left: 0;
+  }
+
+  header .content .buttons .settings {
+    display: none;
+  }
+
+  .code {
+    display: none !important;
+  }
+}
+
+@media (max-width: 700px) {
+  header {
+    flex-wrap: wrap;
+  }
+
+  header.floating {
+    position: static;
+    top: 0;
+    left: 0;
+    transform: none;
+  }
+
+  header .logo {
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+    margin-right: 0;
+  }
+
+  header .content h1,
+  header .content h2 {
+    margin-left: 0;
+  }
+
+  header .content .input {
+    margin: 20px 0 0 0;
+    background: #fff;
+    padding: 20px;
+    width: auto;
+    border-radius: 8px;
+  }
+
+  header .content .buttons .settings {
+    margin-left: 0;
+  }
+}

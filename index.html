@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+    <title>Parol – La Voĉroboto</title>
+
+    <link rel="stylesheet" href="/css/index.css" />
+
+    <link rel="apple-touch-icon" sizes="57x57" href="/images/favicon/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/images/favicon/apple-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/images/favicon/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/images/favicon/apple-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/images/favicon/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/images/favicon/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/images/favicon/apple-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/images/favicon/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-icon-180x180.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/favicon/android-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/images/favicon/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png" />
+    <link rel="manifest" href="/images/favicon/manifest.json" />
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="/images/favicon/ms-icon-144x144.png" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/index.css" />
+  </head>
+
+  <body>
+    <header class="floating">
+      <img src="/images/parol.svg" class="logo" />
+
+      <div class="content">
+        <h1>Saluton! Mi estas Parol.</h1>
+        <h2>Mi estas Esperanta voĉroboto.</h2>
+
+        <div class="input">
+          <textarea placeholder="Donu al mi ion por diri..."></textarea>
+        </div>
+
+        <div class="error"></div>
+
+        <div class="buttons">
+          <button class="settings">&nbsp;</button>
+          <button class="speak">Ekparolu</button>
+          <button class="voice female">&nbsp;</button>
+          <button class="media-control">&nbsp;</button>
+          <button class="download">&nbsp;</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="code">
+      <textarea>
+        [
+          { match: /cil/, replace: 'cyl' },
+          { match: /ci\b/, replace: 'cyj' },
+          { match: /ling/, replace: 'liyng' },
+          { match: /ide\b/, replace: 'ijde' },
+
+          { match: /io\b/, replace: 'ijo' },
+          { match: /ioy\b/, replace: 'ijoj' },
+          { match: /ioyn\b/, replace: 'ijojn' },
+
+          { match: /feyo\b/, replace: 'fejo' },
+          { match: /feyoy\b/, replace: 'feyoj' },
+          { match: /feyoyn\b/, replace: 'feyojn' }
+        ];
+      </textarea>
+    </section>
+
+    <script src="/js/index.js"></script>
+  </body>
+</html>
