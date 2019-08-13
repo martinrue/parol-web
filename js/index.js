@@ -6,29 +6,42 @@ window.parol = (() => {
   const $buttonDownload = document.querySelector(".buttons .download");
 
   const $header = document.querySelector("header");
-
   const $input = document.querySelector("header .input textarea");
-
   const $error = document.querySelector("header .error");
+  const $code = document.querySelector(".code");
+  const $codeInput = document.querySelector(".code textarea");
 
-  const $sectionCode = document.querySelector(".code");
+  const createState = () => {
+    const local = window.location.hostname === "localhost";
+    const api = local ? "http://localhost:9000" : "https://api.roboto.martinrue.com";
 
-  const state = {
-    codeShown: false,
-    voiceFemale: true,
-    audio: null,
-    file: null,
-    playing: false,
-    finished: false
+    return {
+      api,
+      codeShown: false,
+      voiceFemale: true,
+      audio: null,
+      file: null,
+      requesting: false,
+      playing: false,
+      finished: false
+    };
   };
 
-  const showError = message => {
-    $error.innerText = message;
-    show($error, "block");
-  };
+  let state = createState();
 
-  const hideError = () => {
-    hide($error);
+  const makeRequest = (text, voice, config) => {
+    const body = {
+      text,
+      voice,
+      config
+    };
+
+    const req = {
+      method: "POST",
+      body: JSON.stringify(body)
+    };
+
+    return fetch(state.api + "/speak", req).then(res => res.json());
   };
 
   const show = ($element, style) => {
@@ -39,29 +52,21 @@ window.parol = (() => {
     $element.style.display = "none";
   };
 
-  const toggleSettings = () => {
-    state.codeShown = !state.codeShown;
-    $sectionCode.style.display = state.codeShown ? "block" : "none";
-
-    if (state.codeShown) {
-      $header.classList.remove("floating");
-      $sectionCode.style.height = "calc(100% - " + ($header.clientHeight + "px") + ")";
-    } else {
-      $sectionCode.style.height = "auto";
-      $header.classList.add("floating");
-    }
+  const disable = $element => {
+    $element.classList.add("disabled");
   };
 
-  const toggleVoice = () => {
-    state.voiceFemale = !state.voiceFemale;
+  const enable = $element => {
+    $element.classList.remove("disabled");
+  };
 
-    if (state.voiceFemale) {
-      $buttonVoice.classList.add("female");
-      $buttonVoice.classList.remove("male");
-    } else {
-      $buttonVoice.classList.add("male");
-      $buttonVoice.classList.remove("female");
-    }
+  const showError = message => {
+    $error.innerText = "Okazis eraro: " + message + ".";
+    show($error, "block");
+  };
+
+  const hideError = () => {
+    hide($error);
   };
 
   const setMediaButtonIcon = icon => {
@@ -87,15 +92,83 @@ window.parol = (() => {
   };
 
   const speak = () => {
-    playAudio("/sample.mp3");
+    if (state.requesting) {
+      return;
+    }
 
-    hide($buttonVoice);
-    hide($buttonSpeak);
+    hideError();
 
-    setMediaButtonIcon("pause");
-    show($buttonMediaControl);
+    state.requesting = true;
+    disable($buttonSpeak);
+    disable($buttonVoice);
 
-    show($buttonDownload);
+    const resetButtons = () => {
+      state.requesting = false;
+      enable($buttonSpeak);
+      enable($buttonVoice);
+    };
+
+    const text = $input.value;
+    const voice = state.voiceFemale ? "female" : "male";
+    const config = $codeInput.value;
+
+    if (text.trim().length === 0) {
+      $input.focus();
+      return resetButtons();
+    }
+
+    makeRequest(text, voice, config)
+      .then(data => {
+        if (data.error) {
+          resetButtons();
+          return showError(data.error);
+        }
+
+        state.requesting = false;
+
+        playAudio(data.url);
+
+        hide($buttonVoice);
+        hide($buttonSpeak);
+
+        setMediaButtonIcon("pause");
+        show($buttonMediaControl);
+
+        show($buttonDownload);
+      })
+      .catch(err => {
+        resetButtons();
+        showError(err);
+      });
+  };
+
+  const toggleVoice = () => {
+    if (state.requesting) {
+      return;
+    }
+
+    state.voiceFemale = !state.voiceFemale;
+
+    if (state.voiceFemale) {
+      $buttonVoice.classList.add("female");
+      $buttonVoice.classList.remove("male");
+    } else {
+      $buttonVoice.classList.add("male");
+      $buttonVoice.classList.remove("female");
+    }
+  };
+
+  const toggleCode = () => {
+    state.codeShown = !state.codeShown;
+    $code.style.display = state.codeShown ? "block" : "none";
+
+    if (state.codeShown) {
+      $header.classList.remove("floating");
+      $code.style.height = "calc(100% - " + ($header.clientHeight + "px") + ")";
+    } else {
+      $code.style.height = "auto";
+      $header.classList.add("floating");
+    }
   };
 
   const playPause = () => {
@@ -116,6 +189,12 @@ window.parol = (() => {
     state.playing = true;
   };
 
+  const download = () => {
+    if (state.file) {
+      window.open(state.file, "_blank");
+    }
+  };
+
   const reset = () => {
     if (state.audio) {
       state.audio.pause();
@@ -123,32 +202,40 @@ window.parol = (() => {
 
     state.audio = null;
     state.file = null;
+    state.requesting = false;
     state.playing = false;
+    state.finished = false;
 
     hide($buttonMediaControl);
     hide($buttonDownload);
 
-    show($buttonSpeak);
     show($buttonVoice);
-  };
+    show($buttonSpeak);
 
-  const download = () => {
-    if (state.file) {
-      window.open(state.file, "_blank");
-    }
+    enable($buttonVoice);
+    enable($buttonSpeak);
   };
 
   const attachEventHandlers = () => {
-    $buttonSettings.addEventListener("click", toggleSettings);
-    $buttonVoice.addEventListener("click", toggleVoice);
     $buttonSpeak.addEventListener("click", speak);
+    $buttonVoice.addEventListener("click", toggleVoice);
+    $buttonSettings.addEventListener("click", toggleCode);
     $buttonMediaControl.addEventListener("click", playPause);
     $buttonDownload.addEventListener("click", download);
     $input.addEventListener("input", reset);
   };
 
+  const preloadImages = () => {
+    state.images = ["download.svg", "pause.svg", "play.svg", "voice-male.svg"].map(url => {
+      const image = new Image();
+      image.src = "/images/" + url;
+      return image;
+    });
+  };
+
   const init = () => {
     attachEventHandlers();
+    preloadImages();
   };
 
   return {

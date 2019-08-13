@@ -127,6 +127,10 @@ header .content .buttons button {
   outline: none;
 }
 
+header .content .buttons button.disabled {
+  opacity: 0.5;
+}
+
 header .content .buttons button:hover {
   cursor: pointer;
 }
@@ -244,6 +248,10 @@ header .content .buttons .voice.female {
     padding: 20px;
     width: auto;
     border-radius: 8px;
+  }
+
+  header .content .error {
+    margin-left: 0;
   }
 
   header .content .buttons .settings {
