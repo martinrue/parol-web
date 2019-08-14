@@ -10,6 +10,20 @@ window.parol = (() => {
   const $error = document.querySelector("header .error");
   const $code = document.querySelector(".code");
   const $codeInput = document.querySelector(".code textarea");
+  const $counter = document.querySelector("header .input .counter");
+
+  const queryValue = key => {
+    const query = window.location.search.substring(1);
+    const vars = query.split("&");
+
+    for (let i = 0; i < vars.length; i++) {
+      const pair = vars[i].split("=");
+
+      if (decodeURIComponent(pair[0]) === key) {
+        return decodeURIComponent(pair[1]);
+      }
+    }
+  };
 
   const createState = () => {
     const local = window.location.hostname === "localhost";
@@ -17,6 +31,7 @@ window.parol = (() => {
 
     return {
       api,
+      key: queryValue("key"),
       codeShown: false,
       voiceFemale: true,
       audio: null,
@@ -33,7 +48,8 @@ window.parol = (() => {
     const body = {
       text,
       voice,
-      config
+      config,
+      key: state.key
     };
 
     const req = {
@@ -195,6 +211,12 @@ window.parol = (() => {
     }
   };
 
+  const updateCharacterCount = () => {
+    const maxLength = state.key ? 3000 : 300;
+    $input.maxLength = maxLength;
+    $counter.innerText = maxLength - $input.value.length;
+  };
+
   const reset = () => {
     if (state.audio) {
       state.audio.pause();
@@ -205,6 +227,8 @@ window.parol = (() => {
     state.requesting = false;
     state.playing = false;
     state.finished = false;
+
+    updateCharacterCount();
 
     hide($buttonMediaControl);
     hide($buttonDownload);
@@ -236,6 +260,7 @@ window.parol = (() => {
   const init = () => {
     attachEventHandlers();
     preloadImages();
+    updateCharacterCount();
   };
 
   return {
