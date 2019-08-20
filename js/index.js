@@ -44,11 +44,11 @@ window.parol = (() => {
 
   let state = createState();
 
-  const makeRequest = (text, voice, config) => {
+  const makeRequest = (text, voice, rules) => {
     const body = {
       text,
       voice,
-      config,
+      rules,
       key: state.key
     };
 
@@ -126,14 +126,14 @@ window.parol = (() => {
 
     const text = $input.value;
     const voice = state.voiceFemale ? "female" : "male";
-    const config = $codeInput.value;
+    const rules = $codeInput.value;
 
     if (text.trim().length === 0) {
       $input.focus();
       return resetButtons();
     }
 
-    makeRequest(text, voice, config)
+    makeRequest(text, voice, rules)
       .then(data => {
         if (data.error) {
           resetButtons();
@@ -217,6 +217,10 @@ window.parol = (() => {
     $counter.innerText = maxLength - $input.value.length;
   };
 
+  const checkForPrefill = () => {
+    $input.value = (queryValue("text") || "").trim();
+  };
+
   const reset = () => {
     if (state.audio) {
       state.audio.pause();
@@ -261,6 +265,7 @@ window.parol = (() => {
     attachEventHandlers();
     preloadImages();
     updateCharacterCount();
+    checkForPrefill();
   };
 
   return {
