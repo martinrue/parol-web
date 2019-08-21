@@ -1,9 +1,18 @@
 window.parol = (() => {
+  const $buttonInfo = document.querySelector(".info");
+  const $buttonPopoverClose = document.querySelector(".popover .close");
+  const $buttonPopoverEPO = document.querySelector(".popover .lang.epo");
+  const $buttonPopoverENG = document.querySelector(".popover .lang.eng");
+
   const $buttonSettings = document.querySelector(".buttons .settings");
   const $buttonVoice = document.querySelector(".buttons .voice");
   const $buttonSpeak = document.querySelector(".buttons .speak");
   const $buttonMediaControl = document.querySelector(".buttons .media-control");
   const $buttonDownload = document.querySelector(".buttons .download");
+
+  const $infoPopover = document.querySelector(".popover");
+  const $infoPopoverContentENG = document.querySelector(".popover .info-eng");
+  const $infoPopoverContentEPO = document.querySelector(".popover .info-epo");
 
   const $header = document.querySelector("header");
   const $input = document.querySelector("header .input textarea");
@@ -105,6 +114,35 @@ window.parol = (() => {
     state.finished = false;
     setMediaButtonIcon("pause");
     state.audio.play();
+  };
+
+  const showInfo = e => {
+    e.preventDefault();
+    show($infoPopover);
+    hide($buttonInfo);
+    $infoPopover.scrollTop = 0;
+  };
+
+  const hideInfo = e => {
+    e && e.preventDefault();
+    hide($infoPopover);
+    show($buttonInfo);
+  };
+
+  const setInfoLanguageEPO = e => {
+    e.preventDefault();
+    $buttonPopoverEPO.classList.remove("off");
+    $buttonPopoverENG.classList.add("off");
+    show($infoPopoverContentEPO);
+    hide($infoPopoverContentENG);
+  };
+
+  const setInfoLanguageENG = e => {
+    e.preventDefault();
+    $buttonPopoverENG.classList.remove("off");
+    $buttonPopoverEPO.classList.add("off");
+    show($infoPopoverContentENG);
+    hide($infoPopoverContentEPO);
   };
 
   const speak = () => {
@@ -244,17 +282,48 @@ window.parol = (() => {
     enable($buttonSpeak);
   };
 
+  const handleClickOutside = event => {
+    if (!$infoPopover.contains(event.target)) {
+      hideInfo();
+    }
+  };
+
   const attachEventHandlers = () => {
+    $buttonInfo.addEventListener("click", showInfo);
+    $buttonPopoverClose.addEventListener("click", hideInfo);
+    $buttonPopoverEPO.addEventListener("click", setInfoLanguageEPO);
+    $buttonPopoverENG.addEventListener("click", setInfoLanguageENG);
+
     $buttonSpeak.addEventListener("click", speak);
     $buttonVoice.addEventListener("click", toggleVoice);
     $buttonSettings.addEventListener("click", toggleCode);
     $buttonMediaControl.addEventListener("click", playPause);
     $buttonDownload.addEventListener("click", download);
     $input.addEventListener("input", reset);
+
+    document.addEventListener("click", handleClickOutside, true);
+
+    document.onkeydown = function(evt) {
+      evt = evt || window.event;
+
+      if (evt.keyCode === 27) {
+        hideInfo();
+      }
+    };
   };
 
   const preloadImages = () => {
-    state.images = ["download.svg", "pause.svg", "play.svg", "voice-male.svg"].map(url => {
+    state.images = [
+      "download.svg",
+      "pause.svg",
+      "play.svg",
+      "voice-male.svg",
+      "eng.png",
+      "eng-off.png",
+      "epo.png",
+      "epo-off.png",
+      "close.svg"
+    ].map(url => {
       const image = new Image();
       image.src = "/images/" + url;
       return image;
