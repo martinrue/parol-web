@@ -36,7 +36,7 @@ window.parol = (() => {
 
   const createState = () => {
     const local = window.location.hostname === "localhost";
-    const api = local ? "http://localhost:9000" : "https://api.roboto.martinrue.com";
+    const api = local ? "http://localhost:9000" : "https://api.parol.martinrue.com";
 
     return {
       api,
