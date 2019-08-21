@@ -173,13 +173,14 @@ header .content .input {
   width: 60vw;
   border-radius: 8px;
   max-width: 700px;
+  padding: 20px;
 }
 
 header .content .input textarea {
   background: #fff;
   width: 100%;
   height: calc(100% - 40px);
-  padding: 15px;
+  padding: 0 0 15px 0;
   font-size: 20px;
   font-family: "Quicksand", sans-serif;
   outline-style: none;
@@ -192,7 +193,7 @@ header .content .input textarea {
 
 header .content .input .counter {
   line-height: 30px;
-  padding: 0 15px 15px 0;
+  padding: 0 0 15px 0;
   text-align: right;
   box-sizing: border-box;
   color: #999;
