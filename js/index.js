@@ -340,12 +340,17 @@ window.parol = (() => {
     });
   };
 
+  const displayVersion = () => {
+    console.log("Parol version: v0.0.1");
+  };
+
   const init = () => {
     attachEventHandlers();
     initAudio();
-    preloadImages();
     updateCharacterCount();
     checkForPrefill();
+    preloadImages();
+    displayVersion();
   };
 
   return {
