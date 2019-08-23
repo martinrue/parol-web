@@ -10,4 +10,4 @@ Parol is a simple web frontend to the transcription API that produces Esperanto 
 
 ## Demo
 
-Check out https://roboto.martinrue.com to see it in action.
+Check out [the demo](https://parol.martinrue.com) to see it in action.
