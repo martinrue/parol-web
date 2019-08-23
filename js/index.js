@@ -21,6 +21,8 @@ window.parol = (() => {
   const $codeInput = document.querySelector(".code textarea");
   const $counter = document.querySelector("header .input .counter");
 
+  const $audio = document.getElementById("audio");
+
   const queryValue = key => {
     const query = window.location.search.substring(1);
     const vars = query.split("&");
@@ -40,10 +42,9 @@ window.parol = (() => {
 
     return {
       api,
-      key: queryValue("key"),
+      key: queryValue("kodo"),
       codeShown: false,
       voiceFemale: true,
-      audio: null,
       file: null,
       requesting: false,
       playing: false,
@@ -101,19 +102,14 @@ window.parol = (() => {
   };
 
   const playAudio = file => {
+    $audio.src = file;
+    $audio.load();
+
     state.file = file;
     state.playing = true;
-    state.audio = new Audio(file);
-
-    state.audio.onended = () => {
-      setMediaButtonIcon("play");
-      state.playing = false;
-      state.finished = true;
-    };
-
     state.finished = false;
+
     setMediaButtonIcon("pause");
-    state.audio.play();
   };
 
   const showInfo = e => {
@@ -170,6 +166,9 @@ window.parol = (() => {
       $input.focus();
       return resetButtons();
     }
+
+    $audio.src = "/blank.mp3";
+    $audio.load();
 
     makeRequest(text, voice, rules)
       .then(data => {
@@ -232,13 +231,13 @@ window.parol = (() => {
     }
 
     if (state.playing) {
-      state.audio.pause();
+      $audio.pause();
       setMediaButtonIcon("play");
       state.playing = false;
       return;
     }
 
-    state.audio.play();
+    $audio.play();
     setMediaButtonIcon("pause");
     state.playing = true;
   };
@@ -256,15 +255,14 @@ window.parol = (() => {
   };
 
   const checkForPrefill = () => {
-    $input.value = (queryValue("text") || "").trim();
+    $input.value = (queryValue("teksto") || "").trim();
   };
 
   const reset = () => {
-    if (state.audio) {
-      state.audio.pause();
+    if (state.playing) {
+      $audio.pause();
     }
 
-    state.audio = null;
     state.file = null;
     state.requesting = false;
     state.playing = false;
@@ -299,16 +297,28 @@ window.parol = (() => {
     $buttonSettings.addEventListener("click", toggleCode);
     $buttonMediaControl.addEventListener("click", playPause);
     $buttonDownload.addEventListener("click", download);
+
     $input.addEventListener("input", reset);
+    $codeInput.addEventListener("input", reset);
 
     document.addEventListener("click", handleClickOutside, true);
 
     document.onkeydown = function(evt) {
-      evt = evt || window.event;
-
-      if (evt.keyCode === 27) {
+      if ((evt || window.event).keyCode === 27) {
         hideInfo();
       }
+    };
+  };
+
+  const initAudio = () => {
+    $audio.onended = () => {
+      setMediaButtonIcon("play");
+      state.playing = false;
+      state.finished = true;
+    };
+
+    $audio.onloadstart = () => {
+      $audio.play();
     };
   };
 
@@ -332,6 +342,7 @@ window.parol = (() => {
 
   const init = () => {
     attachEventHandlers();
+    initAudio();
     preloadImages();
     updateCharacterCount();
     checkForPrefill();
