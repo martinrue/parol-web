@@ -28,6 +28,8 @@ body {
 
 body {
   background: #90dfaa;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .info {
