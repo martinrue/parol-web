@@ -55,7 +55,7 @@ body {
   min-width: 300px;
   box-shadow: 0px 0px 5px #999;
   border-radius: 10px;
-  overflow: scroll;
+  overflow: auto;
   display: none;
   z-index: 1000;
 }
