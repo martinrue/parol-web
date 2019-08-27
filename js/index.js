@@ -141,6 +141,12 @@ window.parol = (() => {
     hide($infoPopoverContentEPO);
   };
 
+  const logRequest = (text, transcribed) => {
+    text = text.replace(/\n/g, " ").trim();
+    transcribed = transcribed.replace(/\n/g, " ").trim();
+    console.log("OK: [" + text + "] → [" + transcribed + "]");
+  };
+
   const speak = () => {
     if (state.requesting) {
       return;
@@ -179,6 +185,7 @@ window.parol = (() => {
 
         state.requesting = false;
 
+        logRequest(text, data.transcribed);
         playAudio(data.url);
 
         hide($buttonVoice);
