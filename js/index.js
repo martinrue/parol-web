@@ -348,7 +348,7 @@ window.parol = (() => {
   };
 
   const displayVersion = () => {
-    console.log("Parol version: v0.0.2");
+    console.log("Parol version: v0.0.3");
   };
 
   const init = () => {
