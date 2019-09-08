@@ -308,6 +308,12 @@ window.parol = (() => {
     $input.addEventListener("input", reset);
     $codeInput.addEventListener("input", reset);
 
+    $input.addEventListener("keydown", e => {
+      if (e.keyCode === 13 && (e.ctrlKey || e.metaKey)) {
+        speak();
+      }
+    });
+
     document.addEventListener("click", handleClickOutside, true);
 
     document.onkeydown = function(evt) {
@@ -348,7 +354,7 @@ window.parol = (() => {
   };
 
   const displayVersion = () => {
-    console.log("Parol version: v0.0.4");
+    console.log("Parol version: v0.0.5");
   };
 
   const init = () => {
